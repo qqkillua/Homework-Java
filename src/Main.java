@@ -1,5 +1,3 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 void main() {
     // Задание 1
     System.out.println("Имя: Никита; Возраст: 19 лет; Город: Караганда");
