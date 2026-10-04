@@ -1,3 +1,7 @@
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
 void main() {
 //    // Задание 1
 //    System.out.println("Имя: Никита; Возраст: 19 лет; Город: Караганда");
@@ -159,6 +163,98 @@ void main() {
 //    }
 //
 //    System.out.println("Сумма: " + sum);
+
+    // Задание 1 по REST API GET
+//    HttpClient client = HttpClient.newHttpClient();
+//
+//    HttpRequest request = HttpRequest.newBuilder()
+//            .uri(URI.create("https://jsonplaceholder.typicode.com/users/1"))
+//            .GET()
+//            .build();
+//
+//    try {
+//        HttpResponse<String> response = client.send(
+//                request,
+//                HttpResponse.BodyHandlers.ofString()
+//        );
+//
+//        System.out.println("Status Code: " + response.statusCode());
+//        System.out.println("Response Body:\n" + response.body());
+//    } catch (Exception e) {
+//        e.printStackTrace();
+//    }
+
+    // Задание 2 REST API POST
+
+//    HttpClient client = HttpClient.newHttpClient();
+//
+//    String jsonBody = """
+//            {
+//                "title": "Новый пост",
+//                "body": "Содержимое поста",
+//                "userId": "1"
+//            }
+//            """;
+//
+//    HttpRequest request = HttpRequest.newBuilder()
+//            .uri(URI.create("https://jsonplaceholder.typicode.com/posts"))
+//            .header("Content-Type", "application/json")
+//            .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
+//            .build();
+//
+//    try {
+//        HttpResponse response = client.send(request, HttpResponse.BodyHandlers.ofString());
+//
+//        System.out.println("Status Code: " + response.statusCode());
+//        System.out.println("Response Body:\n" + response.body());
+//    } catch (Exception e) {
+//        e.printStackTrace();
+//    }
+
+    // Задание 3 оббббработка статусов
+
+    HttpClient client = HttpClient.newHttpClient();
+
+    String[] urls = {
+            "https://jsonplaceholder.typicode.com/posts/1",
+            "https://jsonplaceholder.typicode.com/posts/999999"
+    };
+
+    for (String url : urls) {
+        System.out.println("Запрос к: " + url);
+        sendAndHandleRequest(client, url);
+        System.out.println();
+    }
+
+}
+
+private static void sendAndHandleRequest(HttpClient client, String url) {
+    HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create(url))
+            .GET()
+            .build();
+    try {
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        int statusCode = response.statusCode();
+
+        switch (statusCode) {
+            case 200 -> {
+                System.out.println(" Успешно (200 OK)!");
+                System.out.println("Тело ответа: " + response.body());
+            }
+            case 404 -> {
+                System.out.println("Ошибка (404 Not Found): запрашиваемый ресурс не найден!");
+            }
+            case 500 -> {
+                System.out.println("Ошибка сервера (500 Internal Server Error). Попробуйте позже.");
+            }
+            default -> {
+                System.out.println("Получен другой статус-код: " + statusCode);
+            }
+        }
+    } catch (Exception e) {
+        System.err.println("Произошла ошибка при отправке сетевого запроса: " + e.getMessage());
+    }
 }
 
 //public class Student {
